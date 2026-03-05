@@ -319,6 +319,19 @@ impl VpnClient {
             .to_string()
     }
 
+    pub fn check_peer_cert_hash(&self, hash: &str) -> OpenconnectResult<bool> {
+        let hash = CString::new(hash)
+            .map_err(|_| OpenconnectError::OtherError("invalid cert hash".to_string()))?;
+        let ret = unsafe { openconnect_check_peer_cert_hash(self.vpninfo, hash.as_ptr()) };
+        if ret < 0 {
+            Err(OpenconnectError::OtherError(format!(
+                "check peer cert hash failed: {ret}"
+            )))
+        } else {
+            Ok(ret == 0)
+        }
+    }
+
     pub fn disable_dtls(&self) -> OpenconnectResult<()> {
         let ret = unsafe { openconnect_disable_dtls(self.vpninfo) };
         match ret {
