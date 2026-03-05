@@ -145,23 +145,23 @@ impl SignalHandle {
                 for sig in signals.forever() {
                     let cmd = match sig {
                         SIGINT | SIGTERM => {
-                            println!("Received SIGINT or SIGTERM");
+                            tracing::debug!("Received SIGINT or SIGTERM");
                             Command::Cancel
                         }
                         SIGHUP => {
-                            println!("Received SIGHUP");
+                            tracing::debug!("Received SIGHUP");
                             Command::Detach
                         }
                         SIGUSR2 => {
-                            println!("Received SIGUSR2");
+                            tracing::debug!("Received SIGUSR2");
                             Command::Pause
                         }
                         SIGUSR1 => {
-                            println!("Received SIGUSR1");
+                            tracing::debug!("Received SIGUSR1");
                             Command::Stats
                         }
                         _ => {
-                            println!("Received unknown signal");
+                            tracing::debug!("Received unknown signal");
                             unreachable!()
                         }
                     };
